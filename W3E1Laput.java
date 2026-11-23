@@ -1,4 +1,5 @@
 package laput;
+import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -7,17 +8,18 @@ public class W3E1Laput {
 	public static void main (String [] args) {
 		// For user input
 		Scanner sclaput = new Scanner(System.in);
-		int laputch;
+		int laputchoice;
 		 // keeps looping until the user input 3
 		do {
 			// displaying the choices
 	      System.out.println("(1) Input New Student Record");
 	      System.out.println("(2) View Student Record");
-	      System.out.println("(3) Exit");
+	      System.out.println("(3) Search a Student");
+	      System.out.println("(4) Exit");
 	      System.out.print("> ");
-	      laputch = sclaput.nextInt();
+	      laputchoice = sclaput.nextInt();
 	      sclaput.nextLine();
-	      switch (laputch) {
+	      switch (laputchoice) {
 	          case 1:
 	        	// choice 1 input new student record
 	   System.out.print("StudNumber: ");
@@ -47,11 +49,9 @@ public class W3E1Laput {
 
 	          case 2:
 	        	  // choice 2  view the saved student records
-	        	 
 	   try (FileReader reader =
 	       new FileReader("VinzRashcid.txt")){
 	         int ch;
-
              // reads and displays each character in the file
 	         while ((ch = reader.read()) != -1) {
 	         System.out.print((char) ch);
@@ -61,16 +61,51 @@ public class W3E1Laput {
 	        	 System.out.println("Error Reading File.");
 	            }
 	            break;
-	            
-	          case 3:
-	        	  //choice 3 exit the program
-	        	  System.out.println("Exiting Program");
-	            break;
-	                
-	          default:
-	        	  System.out.println("Incorrect Choice!");
-	            }
-	      // repeats until the user input choice number 3
-	        } while (laputch != 3);
-	    }
-	}
+	           
+	           //Choice 3: Search a student
+              case 3:
+                  System.out.print("Enter Student Number to Search: ");
+                  String searchName = sclaput.nextLine();
+                  boolean found = false;
+                  try (BufferedReader reader =
+                      new BufferedReader(new FileReader("VinzRashcid.txt"))) {
+                	  String line;
+          
+          // reads the file line by line
+          while ((line = reader.readLine()) != null) {
+                  
+        	  // checks if the student number matches
+            if (line.equalsIgnoreCase("Student Number: " + searchName)) {
+                 found = true;
+                   System.out.println("\nSTUDENT RECORD");
+
+                    // displays the matching student details
+                    System.out.println(line);
+
+                    String lastName = reader.readLine();
+                    String firstName = reader.readLine();
+                    String course = reader.readLine();
+                    System.out.println(lastName);
+                    System.out.println(firstName);
+                    System.out.println(course);
+                              break;
+                          }
+                      }
+             if (!found) {
+                   System.out.println("\nStudent record not found.");
+                      }
+                  } catch (IOException e) {
+                   System.out.println("File Error: " + e.getMessage());
+                  }
+                  break;
+                  // choice 4 to exit the program
+              case 4:
+                  System.out.println("Exiting Program");
+                  break;
+              default:
+                  System.out.println("Incorrect Choice!");
+          }
+      } while (laputchoice != 4);
+   }
+}
+	        	
